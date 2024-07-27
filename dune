@@ -1,0 +1,5 @@
+(executable
+ (name tz)
+ (flags :standard -warn-error -3-26-27-32-48-58-60 -bin-annot -color always)
+ (ocamlopt_flags :standard -O3)
+ (libraries timedesc))
