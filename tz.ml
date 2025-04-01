@@ -42,7 +42,8 @@ let () =
         let name = Timedesc.Time_zone.name z in
         let nice_name =
           match String.split_on_char '/' name with
-          | [n; "General"] | [n] | [_; n] -> n
+          | [_; "East" | "West"] -> name
+          | [n; "General"] | [_; n] -> n
           | _ -> name
         in
         let nice_name = tr '_' " " nice_name in
