@@ -57,9 +57,15 @@ let () =
   let start = Timedesc.Span.sub now half_day in
   let longest_zone_name = List.map (fun (name, _) -> String.length name) zones |> List.fold_left max 0 in
   List.iter (fun (name, zone) ->
+      let offset = match Timedesc.offset_from_utc (Timedesc.of_timestamp_exn ~tz_of_date_time:zone start) with
+        | `Single x | `Ambiguous (_, x) -> Timedesc.Span.get_s x |> Int64.to_int
+      in
       Printf.printf "%s%s |"
         (if Timedesc.Time_zone.equal zone local then bold name else name)
         (String.make (longest_zone_name - String.length name) ' ');
+      Printf.printf " %c%02d |"
+        (if offset < 0 then '-' else '+')
+        (abs offset / 3600);
       let t = ref start in
       for _i = 0 to 24 do
         let hour = Timedesc.of_timestamp_exn ~tz_of_date_time:zone !t |> Timedesc.hour in
